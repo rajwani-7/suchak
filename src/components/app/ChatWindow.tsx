@@ -209,11 +209,14 @@ const ChatWindow = ({ selectedChatId, onSelectChat }: ChatWindowProps) => {
   ];
 
   return (
-    <div className="flex h-full relative">
+    // Main container for the entire chat interface. Uses flexbox for layout.
+    // h-full ensures it takes the full height of its parent.
+    // 'relative' is needed for absolutely positioned children like the new chat sheet.
+    <div className="flex h-full bg-card">
       {/* Chat List */}
       <div className={cn(
-        "bg-card border-r border-border flex-col transition-transform duration-300 ease-in-out",
-        // Make the chat list overlay on mobile so translate doesn't push layout
+        "border-r border-border flex flex-col bg-card transition-transform duration-300 ease-in-out",
+        // On mobile, the chat list is an overlay that takes the full screen width.
         "fixed inset-y-0 left-0 z-40 w-full md:relative md:z-auto md:w-96 md:flex",
         // On mobile we slide the chat list off-screen when a chat is selected
         selectedChatId ? "-translate-x-full md:translate-x-0" : "translate-x-0"
@@ -315,8 +318,9 @@ const ChatWindow = ({ selectedChatId, onSelectChat }: ChatWindowProps) => {
       {/* Chat Messages */}
       {selectedChat ? (
         <div className={cn(
-          "flex flex-col bg-chat-bg relative overflow-hidden w-full",
-          !isMobile && "flex-1"
+          "flex flex-1 flex-col bg-chat-bg relative overflow-hidden",
+          // When a chat is selected on mobile, this view is visible.
+          // On desktop, it's always visible as a flex item.
         )}>
           {/* WhatsApp-like background pattern */}
           <div 
@@ -328,7 +332,7 @@ const ChatWindow = ({ selectedChatId, onSelectChat }: ChatWindowProps) => {
           />
 
           {/* Header */}
-          <div className="sticky top-0 bg-card border-b border-border z-50">
+          <div className="sticky top-0 bg-card border-b border-border z-20">
             <div className="h-16 px-4 flex items-center justify-between">
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div className="md:hidden">
@@ -473,8 +477,11 @@ const ChatWindow = ({ selectedChatId, onSelectChat }: ChatWindowProps) => {
           </div>
 
           {/* Messages */}
-          <ScrollArea className="flex-1 relative z-10 pr-4 scrollbar-hide">
-            <div className="space-y-4 max-w-3xl mx-auto p-4">
+          {/* Scrollable message area. flex-1 allows it to grow and fill available space. */}
+          <ScrollArea className="flex-1 relative z-10">
+            {/* The container for messages has a max-width and is centered, like WhatsApp Web. */}
+            {/* p-4 provides padding, with responsive adjustments for smaller screens. */}
+            <div className="max-w-3xl mx-auto p-4 sm:p-6 space-y-4">
               {messages.map((msg, index) => {
                 const isMe = msg.senderId === 'me';
                 const showDateSeparator = index === 0 || 
@@ -504,7 +511,7 @@ const ChatWindow = ({ selectedChatId, onSelectChat }: ChatWindowProps) => {
                       )}
                       <div
                         className={cn(
-                          'max-w-md px-4 py-2 rounded-lg relative transition-all',
+                          'max-w-lg lg:max-w-xl px-3 py-2 rounded-lg relative transition-all',
                           isMe
                             ? 'bg-chat-sent text-primary-foreground rounded-tr-none'
                             : 'bg-chat-received text-foreground rounded-tl-none',
@@ -641,7 +648,8 @@ const ChatWindow = ({ selectedChatId, onSelectChat }: ChatWindowProps) => {
           </ScrollArea>
 
           {/* Input */}
-          <div className="p-4 bg-card border-t border-border relative z-10">
+          {/* Sticky bottom input bar. z-10 keeps it above the background pattern. */}
+          <div className="p-2 sm:p-4 bg-card border-t border-border relative z-10">
             <div className="flex items-center gap-2">
               <div className="relative">
                 <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setShowEmoji((s) => !s)}>
@@ -760,8 +768,8 @@ const ChatWindow = ({ selectedChatId, onSelectChat }: ChatWindowProps) => {
         </div>
       ) : (
         <div className={cn(
-          "hidden md:flex items-center justify-center bg-chat-bg flex-1",
-          !selectedChatId && "flex-1"
+          "hidden md:flex flex-1 items-center justify-center bg-chat-bg",
+          // This is the placeholder view when no chat is selected on desktop.
         )}>
           <p className="text-muted-foreground">{t.selectChatToStart}</p>
         </div>
