@@ -52,11 +52,11 @@ const CallsView = () => {
   }
 
   return (
-    <div className="h-full bg-card">
+    <div className="flex flex-col h-full bg-card">
       <div className="p-4 border-b border-border">
         <h2 className="text-xl font-semibold text-foreground">Calls</h2>
       </div>
-      <ScrollArea className="h-[calc(100vh-5rem)]">
+      <ScrollArea className="flex-1 overflow-auto">
         {mockCalls.map((call) => (
           <div
             key={call.id}

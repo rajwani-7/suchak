@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface User {
   id: string;
@@ -17,8 +17,34 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const AUTH_STORAGE_KEY = 'suchak_auth_user';
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    try {
+      const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      console.error('Failed to load auth state from localStorage:', e);
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    if (user) {
+      try {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+      } catch (e) {
+        console.error('Failed to save auth state to localStorage:', e);
+      }
+    } else {
+      try {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+      } catch (e) {
+        console.error('Failed to remove auth state from localStorage:', e);
+      }
+    }
+  }, [user]);
 
   const login = (userData: User) => {
     setUser(userData);

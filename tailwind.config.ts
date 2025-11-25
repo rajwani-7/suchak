@@ -49,8 +49,8 @@ export default {
         },
         chat: {
           bg: "hsl(var(--chat-bg))",
-          sent: "hsl(var(--chat-bubble-sent))",
-          received: "hsl(var(--chat-bubble-received))",
+          sent: "hsl(var(--chat-sent))",
+          received: "hsl(var(--chat-received))",
         },
         sidebar: {
           hover: "hsl(var(--sidebar-hover))",

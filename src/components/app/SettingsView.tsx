@@ -52,11 +52,11 @@ const SettingsView = () => {
   ];
 
   return (
-    <div className="h-full bg-card">
+    <div className="flex flex-col h-full bg-card">
       <div className="p-4 border-b border-border">
         <h2 className="text-xl font-semibold text-foreground">Settings</h2>
       </div>
-      <ScrollArea className="h-[calc(100vh-5rem)]">
+      <ScrollArea className="flex-1 overflow-auto">
         {settingsSections.map((section) => (
           <div key={section.title} className="py-2">
             <h3 className="px-4 py-2 text-sm font-semibold text-muted-foreground">

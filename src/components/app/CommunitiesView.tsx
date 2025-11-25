@@ -5,12 +5,12 @@ import { mockCommunities } from '@/data/mockData';
 
 const CommunitiesView = () => {
   return (
-    <div className="flex h-full">
-      <div className="w-96 bg-card border-r border-border">
+    <div className="flex flex-col md:flex-row h-full">
+      <div className="w-full md:w-96 flex-shrink-0 bg-card border-r border-border flex flex-col">
         <div className="p-4 border-b border-border">
           <h2 className="text-xl font-semibold text-foreground">Communities</h2>
         </div>
-        <ScrollArea className="h-[calc(100vh-5rem)]">
+        <ScrollArea className="flex-1 overflow-auto">
           {mockCommunities.map((community) => (
             <div
               key={community.id}

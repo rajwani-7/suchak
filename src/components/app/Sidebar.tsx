@@ -2,6 +2,7 @@ import { LucideIcon } from 'lucide-react';
 import { ActiveView } from '@/pages/app/MainApp';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface MenuItem {
   id: ActiveView;
@@ -17,6 +18,7 @@ interface SidebarProps {
 
 const Sidebar = ({ menuItems, activeView, onViewChange }: SidebarProps) => {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   
   const getTranslatedLabel = (id: ActiveView) => {
     const labels: Record<ActiveView, string> = {
@@ -30,7 +32,10 @@ const Sidebar = ({ menuItems, activeView, onViewChange }: SidebarProps) => {
     return labels[id];
   };
   return (
-    <div className="w-16 bg-card border-r border-border flex flex-col items-center py-4 space-y-2">
+    <div className={cn(
+      "bg-card border-r border-border flex flex-col items-center py-4 space-y-2",
+      isMobile ? "w-14" : "w-16"
+    )}>
       {menuItems.map((item) => {
         const Icon = item.icon;
         const isActive = activeView === item.id;
